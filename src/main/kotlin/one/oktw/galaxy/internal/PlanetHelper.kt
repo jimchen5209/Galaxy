@@ -1,8 +1,5 @@
 package one.oktw.galaxy.internal
 
-import com.mongodb.client.model.Filters.eq
-import kotlinx.coroutines.experimental.launch
-import one.oktw.galaxy.Main.Companion.databaseManager
 import one.oktw.galaxy.Main.Companion.main
 import one.oktw.galaxy.internal.types.Planet
 import org.spongepowered.api.Sponge
@@ -12,14 +9,19 @@ import org.spongepowered.api.world.storage.WorldProperties
 import java.io.IOException
 import java.io.UncheckedIOException
 import java.util.*
+import java.util.concurrent.CompletableFuture
 
-class PlanetManager {
+class PlanetHelper {
     companion object {
         private val logger = main.logger
-        private val planetCollection = databaseManager.database.getCollection("Planet", Planet::class.java)
         private val server = Sponge.getServer()
 
         fun createPlanet(name: String): Planet {
+            if (server.getWorldProperties(name).isPresent)
+                throw IllegalArgumentException("World already exists")
+            if (!name.matches(Regex("[a-z0-9]+", RegexOption.IGNORE_CASE)))
+                throw IllegalArgumentException("Name only allow a~z and 0~9")
+
             val properties: WorldProperties
             logger.info("Create World [{}]", name)
 
@@ -34,37 +36,34 @@ class PlanetManager {
                 throw UncheckedIOException(e)
             }
 
-            val planet = Planet(world = properties.uniqueId, name = name)
-            launch { planetCollection.insertOne(planet) }
-            return planet
+            return Planet(world = properties.uniqueId, name = name)
         }
 
-        fun removePlanet(uuid: UUID) {
-            val planet = planetCollection.find(eq("uuid", uuid)).first()
-            val worldUUID = planet.world!!
+        fun removePlanet(worldUUID: UUID): CompletableFuture<Boolean> {
             val properties: WorldProperties
             if (server.getWorldProperties(worldUUID).isPresent) {
                 properties = server.getWorldProperties(worldUUID).get()
             } else {
-                logger.error("Delete World [{}] failed: world not found", worldUUID.toString())
-                return
+                return CompletableFuture.completedFuture(true)
             }
 
             logger.info("Deleting World [{}]", properties.worldName)
             if (server.getWorld(worldUUID).isPresent) {
                 val world = server.getWorld(worldUUID).get()
-                world.players.parallelStream().forEach { player -> player.setLocationSafely(server.getWorld(server.defaultWorldName).get().spawnLocation) }
+                world.players.parallelStream().forEach { it.setLocationSafely(server.getWorld(server.defaultWorldName).get().spawnLocation) }
                 server.unloadWorld(world)
             }
 
-            server.deleteWorld(properties).get()
-            launch { planetCollection.deleteOne(eq("uuid", uuid)) }
+            return server.deleteWorld(properties)
         }
 
-        internal fun loadPlanet(uuid: UUID): Optional<World> {
-            return if (server.getWorldProperties(uuid).isPresent) {
-                val worldProperties = server.getWorldProperties(uuid).get()
+        fun loadPlanet(planet: Planet): Optional<World> {
+            return if (server.getWorldProperties(planet.world!!).isPresent) {
+                planet.lastTime = Date()
+
+                val worldProperties = server.getWorldProperties(planet.world!!).get()
                 worldProperties.setGenerateSpawnOnLoad(false)
+
                 server.loadWorld(worldProperties)
             } else {
                 Optional.empty()
