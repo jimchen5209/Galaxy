@@ -42,10 +42,14 @@ class UnStuck : CommandBase {
                 src.sendMessage(Text.of(TextColors.GREEN, "已嘗試自救\n",TextColors.GOLD,"覺得沒被救到嗎?",retrybutton))
                 return CommandResult.affectedEntities(1)
             } else {
-                src.sendMessage(Text.of(TextColors.RED, "自救失敗，找不到安全位置\n",retrybutton))
-                return CommandResult.success()
-            }
-                    }
+                if (src.setLocationSafely(src.location.add(0.0, 2.0, 0.0))){
+                    src.sendMessage(Text.of(TextColors.GREEN, "已嘗試自救\n",TextColors.GOLD,"覺得沒被救到嗎?",retrybutton))
+                    return CommandResult.affectedEntities(1)
+                }else {
+                    src.sendMessage(Text.of(TextColors.RED, "自救失敗，找不到安全位置"))
+                    return CommandResult.success()
+                }
+            }}
         return CommandResult.empty()
     }
 }
