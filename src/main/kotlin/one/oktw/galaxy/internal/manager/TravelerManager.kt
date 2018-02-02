@@ -2,17 +2,17 @@ package one.oktw.galaxy.internal.manager
 
 import com.mongodb.client.model.Filters.eq
 import com.mongodb.client.model.UpdateOptions
+import kotlinx.coroutines.experimental.launch
 import one.oktw.galaxy.Main.Companion.databaseManager
 import one.oktw.galaxy.Main.Companion.galaxyManager
 import one.oktw.galaxy.internal.types.Position
 import one.oktw.galaxy.internal.types.Traveler
 import org.spongepowered.api.entity.living.player.Player
 import java.util.*
-import kotlin.collections.ArrayList
 
 class TravelerManager {
     private val travelerCollation = databaseManager.database.getCollection("Traveler", Traveler::class.java)
-    private val viewer = ArrayList<UUID>()
+    private val cache = HashMap<UUID, Traveler>()
 
     private fun createTraveler(player: Player): Traveler {
         val traveler = Traveler(player.uniqueId, position = Position().fromPosition(player.location.position))
@@ -21,11 +21,14 @@ class TravelerManager {
     }
 
     fun getTraveler(player: Player): Traveler {
-        return travelerCollation.find(eq("uuid", player.uniqueId)).first() ?: createTraveler(player)
+        return cache.getOrPut(player.uniqueId) {
+            travelerCollation.find(eq("uuid", player.uniqueId)).first() ?: createTraveler(player)
+        }
     }
 
     fun saveTraveler(traveler: Traveler) {
-        travelerCollation.replaceOne(eq("uuid", traveler.uuid), traveler, UpdateOptions().upsert(true))
+        launch { travelerCollation.replaceOne(eq("uuid", traveler.uuid), traveler, UpdateOptions().upsert(true)) }
+        cache.remove(traveler.uuid)
     }
 
     fun updateTraveler(player: Player) {
@@ -35,19 +38,5 @@ class TravelerManager {
         traveler.position.planet = galaxyManager.getPlanet(player.world.uniqueId)?.uuid
 
         traveler.save()
-    }
-
-    fun setViewer(uuid: UUID) {
-        if (viewer.contains(uuid)) return
-
-        viewer += uuid
-    }
-
-    fun isViewer(uuid: UUID): Boolean {
-        return viewer.contains(uuid)
-    }
-
-    fun removeViewer(uuid: UUID) {
-        viewer -= uuid
     }
 }
