@@ -1,9 +1,15 @@
 package one.oktw.galaxy.types.item
 
+import one.oktw.galaxy.enums.GunType
 import one.oktw.galaxy.types.Upgrade
+import java.util.*
 
 data class Gun(
-        var coolDown: Double = 5.0,
+        val uuid: UUID = UUID.randomUUID(),
+        var type: GunType = GunType.ORIGIN,
+        var maxTemp: Int = 100,
+        var heat: Int = 10,
+        var cooling: Int = 1,
         var range: Double = 10.0,
         var damage: Double = 3.0,
         var through: Int = 1,

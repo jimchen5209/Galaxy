@@ -3,8 +3,10 @@ package one.oktw.galaxy
 import com.google.inject.Inject
 import ninja.leaping.configurate.commented.CommentedConfigurationNode
 import ninja.leaping.configurate.loader.ConfigurationLoader
+import one.oktw.galaxy.data.DataOverheat
 import one.oktw.galaxy.data.DataUUID
 import one.oktw.galaxy.manager.*
+import one.oktw.galaxy.task.CoolingStatus
 import org.slf4j.Logger
 import org.spongepowered.api.config.DefaultConfig
 import org.spongepowered.api.data.DataRegistration
@@ -16,6 +18,7 @@ import org.spongepowered.api.event.game.state.GamePreInitializationEvent
 import org.spongepowered.api.event.game.state.GameStartingServerEvent
 import org.spongepowered.api.plugin.Plugin
 import org.spongepowered.api.plugin.PluginContainer
+import org.spongepowered.api.scheduler.Task
 
 @Suppress("unused", "UNUSED_PARAMETER", "MemberVisibilityCanBePrivate")
 @Plugin(id = "galaxy",
@@ -68,6 +71,12 @@ class Main {
                 .dataClass(DataUUID::class.java).immutableClass(DataUUID.Immutable::class.java)
                 .builder(DataUUID.Builder())
                 .buildAndRegister(plugin)
+
+        DataRegistration.builder()
+                .dataName("Overheat").manipulatorId("overheat")
+                .dataClass(DataOverheat::class.java).immutableClass(DataOverheat.Immutable::class.java)
+                .builder(DataOverheat.Builder())
+                .buildAndRegister(plugin)
     }
 
     @Listener
@@ -87,6 +96,12 @@ class Main {
         commandManager = CommandRegister()
         viewerManager = ViewerManager()
         chunkLoaderManager.loadForcedWorld()
+
+        Task.builder()
+                .name("CoolingStatus")
+                .intervalTicks(1)
+                .execute(CoolingStatus())
+                .submit(this)
     }
 
     @Listener

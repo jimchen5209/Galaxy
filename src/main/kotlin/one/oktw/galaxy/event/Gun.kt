@@ -3,7 +3,9 @@ package one.oktw.galaxy.event
 import com.flowpowered.math.imaginary.Quaterniond
 import kotlinx.coroutines.experimental.launch
 import one.oktw.galaxy.Main.Companion.travelerManager
+import one.oktw.galaxy.data.DataUUID
 import one.oktw.galaxy.enums.UpgradeType.*
+import one.oktw.galaxy.helper.CoolDownHelper
 import org.spongepowered.api.block.BlockTypes.*
 import org.spongepowered.api.data.key.Keys
 import org.spongepowered.api.data.property.entity.EyeLocationProperty
@@ -29,25 +31,42 @@ class Gun {
     @Listener
     @Suppress("unused")
     fun onInteractItem(event: InteractItemEvent.Secondary.MainHand, @Getter("getSource") player: Player) {
-        if (event.itemStack.type != ItemTypes.WOODEN_SWORD) return
+        val itemStack = event.itemStack
+        if (itemStack.type != ItemTypes.WOODEN_SWORD || !itemStack[DataUUID.key].isPresent) return
 
         val world = player.world
-        val gun = travelerManager.getTraveler(player).item.gun ?: return // TODO Multi gun support
+        val gun = travelerManager.getTraveler(player).item.gun
+                .find { it.uuid == itemStack[DataUUID.key].get() }!!
         val source = player.getProperty(EyeLocationProperty::class.java)
                 .map(EyeLocationProperty::getValue).orElse(null) ?: return
 
-        var coolDown = gun.coolDown
+        var cooling = gun.cooling
         var range = gun.range
         var damage = gun.damage
         var through = gun.through
+        var maxTemp = gun.maxTemp
 
+        // TODO
         gun.upgrade.forEach {
             when (it.type) {
                 DAMAGE -> damage += it.level * 3
                 RANGE -> range += it.level * 5
-                COOLING -> coolDown += it.level * 2
+                COOLING -> cooling += it.level * 2
                 THROUGH -> through += it.level
+                HEAT -> maxTemp += it.level * 5
             }
+        }
+
+        var heatStatus = CoolDownHelper.getCoolDown(gun.uuid)
+        if (heatStatus == null) {
+            heatStatus = CoolDownHelper.HeatStatus(gun.uuid, max = maxTemp, cooling = cooling)
+            CoolDownHelper.addCoolDown(heatStatus)
+        }
+
+        if (heatStatus.isOverheat()) return
+
+        if (heatStatus.addHeat(gun.heat)) {
+            world.playSound(SoundType.of("gun.overheat"), SoundCategories.PLAYER, source, 1.0)
         }
 
         val target = world.getIntersectingEntities(
@@ -74,6 +93,7 @@ class Gun {
 
         if (!target.isEmpty() && !wall.hasNext()) target.stream()
                 .filter { it.entity !is Boss }
+                .sorted { hit1, hit2 -> ((hit1.intersection.distance(source) - hit2.intersection.distance(source)) * 10).roundToInt() }
                 .limit(through.toLong())
                 .forEach {
                     val entity = it.entity as Living
