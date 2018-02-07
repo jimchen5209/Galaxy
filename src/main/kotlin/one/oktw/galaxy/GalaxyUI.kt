@@ -9,7 +9,6 @@ import com.codehusky.huskyui.states.action.runnable.UIRunnable
 import com.codehusky.huskyui.states.element.ActionableElement
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.data.key.Keys
-import org.spongepowered.api.data.type.SkullType
 import org.spongepowered.api.data.type.SkullTypes
 import org.spongepowered.api.entity.living.player.Player
 import org.spongepowered.api.item.ItemTypes
@@ -19,7 +18,6 @@ import org.spongepowered.api.profile.GameProfile
 import org.spongepowered.api.text.Text
 import org.spongepowered.api.text.action.TextActions
 import org.spongepowered.api.text.format.TextColors
-import org.spongepowered.api.text.format.TextStyle
 import org.spongepowered.api.text.format.TextStyles
 import java.util.*
 
