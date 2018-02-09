@@ -1,6 +1,6 @@
 package one.oktw.galaxy.command
 
-import one.oktw.galaxy.UI.UI
+import one.oktw.galaxy.ui.GalaxyUI
 import org.spongepowered.api.command.CommandResult
 import org.spongepowered.api.command.CommandSource
 import org.spongepowered.api.command.args.CommandContext
@@ -16,7 +16,7 @@ class GUI : CommandBase {
 
     override fun execute(src: CommandSource, args: CommandContext): CommandResult {
         if (src is Player) {
-            UI.mainMenu(src)
+            GalaxyUI.mainMenu(src)
             return CommandResult.success()
         }
         return CommandResult.empty()
