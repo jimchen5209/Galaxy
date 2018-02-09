@@ -1,4 +1,4 @@
-package one.oktw.galaxy
+package one.oktw.galaxy.UI
 
 import com.codehusky.huskyui.StateContainer
 import com.codehusky.huskyui.states.Page
@@ -7,7 +7,6 @@ import com.codehusky.huskyui.states.action.ActionType
 import com.codehusky.huskyui.states.action.runnable.RunnableAction
 import com.codehusky.huskyui.states.action.runnable.UIRunnable
 import com.codehusky.huskyui.states.element.ActionableElement
-import one.oktw.galaxy.data.DataUUID
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.data.key.Keys
 import org.spongepowered.api.data.type.SkullTypes
@@ -30,7 +29,7 @@ class UI {
             val mainMenu = Page.builder()
                     .setTitle(Text.of("OKTWGalaxy"))
                     .setInventoryDimension(InventoryDimension(9,2))
-                    .putElement(calcSlot(0,2),
+                    .putElement(calcSlot(0, 2),
                             ActionableElement(
                                     Action(mainContainer, ActionType.NORMAL,"galaxyManager"),
                                     ItemStack.builder()
@@ -42,7 +41,7 @@ class UI {
                                             .build()
                             )
                     )
-                    .putElement(calcSlot(0,6),
+                    .putElement(calcSlot(0, 6),
                             ActionableElement(
                             Action(mainContainer, ActionType.NORMAL,"playerFeature"),
                             ItemStack.builder()
@@ -54,7 +53,7 @@ class UI {
                                     .build()
                             )
                     )
-                    .putElement(calcSlot(1,8),
+                    .putElement(calcSlot(1, 8),
                             ActionableElement(
                                     Action(mainContainer, ActionType.CLOSE,"mainMenu"),
                                     ItemStack.builder()
@@ -71,7 +70,7 @@ class UI {
                     .setTitle(Text.of("星系管理"))
                     .setInventoryDimension(InventoryDimension(9,2))
                     //TODO
-                    .putElement(calcSlot(1,8),
+                    .putElement(calcSlot(1, 8),
                             ActionableElement(
                                     Action(mainContainer, ActionType.BACK,"galaxyManager"),
                                     ItemStack.builder()
@@ -89,7 +88,7 @@ class UI {
                     .setTitle(Text.of("玩家功能"))
                     .setInventoryDimension(InventoryDimension(9,2))
                     //TODO
-                    .putElement(calcSlot(0,2),
+                    .putElement(calcSlot(0, 2),
                             ActionableElement(
                                     RunnableAction(mainContainer, ActionType.CLOSE,"playerFeature", UIRunnable {
                                         Sponge.getCommandManager().process(src, "unstuck")
@@ -101,7 +100,7 @@ class UI {
                                             .build()
                             )
                     )
-                    .putElement(calcSlot(0,6),
+                    .putElement(calcSlot(0, 6),
                             ActionableElement(
                                     RunnableAction(mainContainer, ActionType.CLOSE,"playerFeature", UIRunnable {
                                         src.sendMessage(Text.of("請選擇一個選項"))
@@ -129,7 +128,7 @@ class UI {
                                             .build()
                             )
                     )
-                    .putElement(calcSlot(1,8),
+                    .putElement(calcSlot(1, 8),
                             ActionableElement(
                                     Action(mainContainer, ActionType.BACK,"playerFeature"),
                                     ItemStack.builder()
@@ -157,7 +156,7 @@ class UI {
             val menu = Page.builder()
                     .setTitle(Text.of("ChunkLoader"))
                     .setInventoryDimension(InventoryDimension(9,1))
-                    .putElement(calcSlot(0,2),
+                    .putElement(calcSlot(0, 2),
                             ActionableElement(
                                     RunnableAction(container, ActionType.NONE,"galaxyManager", UIRunnable {
                                         //TODO
@@ -165,7 +164,7 @@ class UI {
                                     chunkLoaderSwitch
                             )
                     )
-                    .putElement(calcSlot(0,4),
+                    .putElement(calcSlot(0, 4),
                             ActionableElement(
                                     RunnableAction(container, ActionType.NONE,"galaxyManager", UIRunnable {
                                         //TODO
@@ -173,11 +172,10 @@ class UI {
                                     ItemStack.builder()
                                             .itemType(ItemTypes.ENCHANTED_BOOK)
                                             .add(Keys.DISPLAY_NAME, Text.of(TextColors.GOLD,"升級"))
-//                                            .add(Keys.ITEM_LORE, listOf(Text.of(TextColors.AQUA,"玩家功能")))
                                             .build()
                             )
                     )
-                    .putElement(calcSlot(0,6),
+                    .putElement(calcSlot(0, 6),
                             ActionableElement(
                                     RunnableAction(container, ActionType.NONE,"galaxyManager", UIRunnable {
                                         //TODO
@@ -185,7 +183,6 @@ class UI {
                                     ItemStack.builder()
                                             .itemType(ItemTypes.BARRIER)
                                             .add(Keys.DISPLAY_NAME, Text.of(TextColors.RED,"刪除此 ChunkLoader"))
-//                                            .add(Keys.ITEM_LORE, listOf(Text.of(TextColors.RED,TextStyles.BOLD,"")))
                                             .build()
                             )
                     )
