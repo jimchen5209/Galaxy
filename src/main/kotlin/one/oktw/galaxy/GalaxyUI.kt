@@ -7,6 +7,7 @@ import com.codehusky.huskyui.states.action.ActionType
 import com.codehusky.huskyui.states.action.runnable.RunnableAction
 import com.codehusky.huskyui.states.action.runnable.UIRunnable
 import com.codehusky.huskyui.states.element.ActionableElement
+import one.oktw.galaxy.data.DataUUID
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.data.key.Keys
 import org.spongepowered.api.data.type.SkullTypes
@@ -142,6 +143,55 @@ class UI {
                     .build("playerFeature")
             mainContainer.addState(playerFeature)
             mainContainer.launchFor(src)
+        }
+        fun chunkLoaderUI(src: Player){
+            val container = StateContainer()
+            //Main Menu
+            val clBuilder = ItemStack.builder().itemType(ItemTypes.LEVER)
+//            if () { //TODO
+//                clBuilder.add(Keys.DISPLAY_NAME, Text.of(TextColors.GREEN,"啟用 ChunkLoader"))
+//            }else{
+//                clBuilder.add(Keys.DISPLAY_NAME, Text.of(TextColors.RED,"停用 ChunkLoader"))
+//            }
+            val chunkLoaderSwitch = clBuilder.build()
+            val menu = Page.builder()
+                    .setTitle(Text.of("ChunkLoader"))
+                    .setInventoryDimension(InventoryDimension(9,1))
+                    .putElement(calcSlot(0,2),
+                            ActionableElement(
+                                    RunnableAction(container, ActionType.NONE,"galaxyManager", UIRunnable {
+                                        //TODO
+                                    }),
+                                    chunkLoaderSwitch
+                            )
+                    )
+                    .putElement(calcSlot(0,4),
+                            ActionableElement(
+                                    RunnableAction(container, ActionType.NONE,"galaxyManager", UIRunnable {
+                                        //TODO
+                                    }),
+                                    ItemStack.builder()
+                                            .itemType(ItemTypes.ENCHANTED_BOOK)
+                                            .add(Keys.DISPLAY_NAME, Text.of(TextColors.GOLD,"升級"))
+//                                            .add(Keys.ITEM_LORE, listOf(Text.of(TextColors.AQUA,"玩家功能")))
+                                            .build()
+                            )
+                    )
+                    .putElement(calcSlot(0,6),
+                            ActionableElement(
+                                    RunnableAction(container, ActionType.NONE,"galaxyManager", UIRunnable {
+                                        //TODO
+                                    }),
+                                    ItemStack.builder()
+                                            .itemType(ItemTypes.BARRIER)
+                                            .add(Keys.DISPLAY_NAME, Text.of(TextColors.RED,"刪除此 ChunkLoader"))
+//                                            .add(Keys.ITEM_LORE, listOf(Text.of(TextColors.RED,TextStyles.BOLD,"")))
+                                            .build()
+                            )
+                    )
+                    .build("menu")
+            container.setInitialState(menu)
+            container.launchFor(src)
         }
         private fun calcSlot(Line: Int, Column: Int): Int {
             return 9 * Line + Column
