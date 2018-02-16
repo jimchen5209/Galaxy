@@ -14,21 +14,21 @@ import org.spongepowered.api.data.value.mutable.Value
 import org.spongepowered.api.util.TypeTokens
 import java.util.*
 
-class DataOverheat(overheat: Boolean) : AbstractBooleanData<DataOverheat, DataOverheat.Immutable>(overheat, key, false) {
+class DataScope(scoping: Boolean) : AbstractBooleanData<DataScope, DataScope.Immutable>(scoping, key, false) {
     companion object {
         val key: Key<Value<Boolean>> = Key.builder()
                 .type(TypeTokens.BOOLEAN_VALUE_TOKEN)
-                .id("overheat")
-                .name("Overheat")
-                .query(DataQuery.of("overheat"))
+                .id("scoping")
+                .name("Scoping")
+                .query(DataQuery.of("scoping"))
                 .build()
     }
 
     override fun getContentVersion() = 1
     override fun asImmutable() = Immutable(value)
-    override fun copy() = DataOverheat(value)
+    override fun copy() = DataScope(value)
 
-    override fun from(container: DataContainer): Optional<DataOverheat> {
+    override fun from(container: DataContainer): Optional<DataScope> {
         return if (container[key.query].isPresent) {
             value = container.getBoolean(key.query).get()
             Optional.of(this)
@@ -37,19 +37,19 @@ class DataOverheat(overheat: Boolean) : AbstractBooleanData<DataOverheat, DataOv
         }
     }
 
-    override fun fill(dataHolder: DataHolder, overlap: MergeFunction): Optional<DataOverheat> {
-        value = overlap.merge(this, dataHolder[DataOverheat::class.java].orElse(null)).value
+    override fun fill(dataHolder: DataHolder, overlap: MergeFunction): Optional<DataScope> {
+        value = overlap.merge(this, dataHolder[DataScope::class.java].orElse(null)).value
         return Optional.of(this)
     }
 
-    class Immutable(overheat: Boolean) : AbstractImmutableBooleanData<Immutable, DataOverheat>(overheat, key, false) {
+    class Immutable(scoping: Boolean) : AbstractImmutableBooleanData<Immutable, DataScope>(scoping, key, false) {
         override fun getContentVersion() = 1
-        override fun asMutable() = DataOverheat(value)
+        override fun asMutable() = DataScope(value)
     }
 
-    class Builder : AbstractDataBuilder<DataOverheat>(DataOverheat::class.java, 1), DataManipulatorBuilder<DataOverheat, Immutable> {
-        override fun createFrom(dataHolder: DataHolder): Optional<DataOverheat> = create().fill(dataHolder)
-        override fun create() = DataOverheat(false)
+    class Builder : AbstractDataBuilder<DataScope>(DataScope::class.java, 1), DataManipulatorBuilder<DataScope, Immutable> {
+        override fun createFrom(dataHolder: DataHolder): Optional<DataScope> = create().fill(dataHolder)
+        override fun create() = DataScope(false)
         override fun buildContent(container: DataView) = create().from(container.copy())
     }
 }

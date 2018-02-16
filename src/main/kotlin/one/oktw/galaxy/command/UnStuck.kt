@@ -1,7 +1,8 @@
 package one.oktw.galaxy.command
 
 
-import one.oktw.galaxy.helper.DelayHelper
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import org.spongepowered.api.command.CommandResult
 import org.spongepowered.api.command.CommandSource
 import org.spongepowered.api.command.args.CommandContext
@@ -13,6 +14,7 @@ import org.spongepowered.api.text.action.TextActions
 import org.spongepowered.api.text.format.TextColors
 import org.spongepowered.api.text.format.TextStyles
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 val Btnlist : ArrayList<UUID> = ArrayList()
@@ -48,21 +50,23 @@ class UnStuck : CommandBase {
             if (src.setLocationSafely(src.location)) {
                 callbackLimit.add(random)
                 src.sendMessage(Text.of(TextColors.GREEN, "已嘗試自救\n", TextColors.GOLD, "覺得沒被救到嗎?", retryButton))
-                DelayHelper.delay(Runnable {
+                launch {
+                    delay(5, TimeUnit.MINUTES)
                     if (random in callbackLimit) {
                         callbackLimit.remove(random)
                     }
-                }, 300)
+                }
 
                 return CommandResult.affectedEntities(1)
             } else if (src.setLocationSafely(src.location.add(0.0, 2.0, 0.0))) {
                 callbackLimit.add(random)
                 src.sendMessage(Text.of(TextColors.GREEN, "已嘗試自救\n", TextColors.GOLD, "覺得沒被救到嗎?", retryButton))
-                DelayHelper.delay(Runnable {
+                launch {
+                    delay(5, TimeUnit.MINUTES)
                     if (random in callbackLimit) {
                         callbackLimit.remove(random)
                     }
-                }, 300)
+                }
 
                 return CommandResult.affectedEntities(1)
             }
