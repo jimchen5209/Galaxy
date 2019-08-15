@@ -18,11 +18,13 @@
 
 package one.oktw.galaxy.command
 
+import one.oktw.galaxy.command.commands.Item
 import one.oktw.galaxy.command.commands.Join
 
 class CommandRegister {
     init {
 //        CommandHelper.register(Spawn())
         CommandHelper.register(Join())
+        CommandHelper.register(Item())
     }
 }
