@@ -22,10 +22,7 @@ import com.mojang.brigadier.CommandDispatcher
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import one.oktw.galaxy.command.Command
-import one.oktw.galaxy.item.Button
-import one.oktw.galaxy.item.Material
-import one.oktw.galaxy.item.Tool
-import one.oktw.galaxy.item.Weapon
+import one.oktw.galaxy.item.*
 import one.oktw.galaxy.item.type.ToolType.WRENCH
 
 class Item : Command {
@@ -42,6 +39,7 @@ class Item : Command {
     private fun execute(source: ServerCommandSource): Int {
         val items = listOf(
             Button().createItemStack(),
+            Gui().createItemStack(),
             Tool().createItemStack(),
             Tool(WRENCH).createItemStack(),
             Weapon().createItemStack(),
