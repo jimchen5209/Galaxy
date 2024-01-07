@@ -19,10 +19,12 @@
 package one.oktw.galaxy.recipe
 
 import net.minecraft.recipe.RecipeType
+import net.minecraft.util.Identifier
 import one.oktw.galaxy.mixin.interfaces.CustomRecipeManager
 import one.oktw.galaxy.recipe.blocks.Elevator
 import one.oktw.galaxy.recipe.blocks.HTCraftingTable
-import one.oktw.galaxy.recipe.easyRecipe.*
+import one.oktw.galaxy.recipe.blocks.Harvest
+import one.oktw.galaxy.recipe.blocks.Trashcan
 import one.oktw.galaxy.recipe.materials.CeramicPlate
 import one.oktw.galaxy.recipe.tools.Crowbar
 import one.oktw.galaxy.recipe.tools.Wrench
@@ -30,31 +32,12 @@ import one.oktw.galaxy.recipe.tools.Wrench
 object RecipeRegistry {
     fun register() {
         // Recipe
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Wrench())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Crowbar())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Elevator())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, HTCraftingTable())
-        CustomRecipeManager.addRecipe(RecipeType.SMELTING, CeramicPlate())
-        // Easy Recipe
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Ladder())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Chest())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Hopper())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, RedStoneLamp())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Dispenser())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, DispenserWithBow())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, RedStoneRepeater())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, TrappedChest())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, CarrotOnAStick())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, WarpedFungusOnAStick())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, BookAndQuill())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Minecart())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Stick())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Glass())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, GlassPane())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, GlassPaneRestore())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, StainedGlassRestore())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, StainedGlassPaneRestore())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, WoodenSlab())
-        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, SlabRestore())
+        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Identifier("galaxy", "item/wrench"), Wrench())
+        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Identifier("galaxy", "item/crowbar"), Crowbar())
+        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Identifier("galaxy", "block/elevator"), Elevator())
+        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Identifier("galaxy", "block/htct"), HTCraftingTable())
+        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Identifier("galaxy", "block/harvest"), Harvest())
+        CustomRecipeManager.addRecipe(RecipeType.SMELTING, Identifier("galaxy", "material/ceramic_plate"), CeramicPlate())
+        CustomRecipeManager.addRecipe(RecipeType.CRAFTING, Identifier("galaxy", "block/trashcan"), Trashcan())
     }
 }

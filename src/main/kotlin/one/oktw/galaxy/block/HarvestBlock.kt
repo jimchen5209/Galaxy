@@ -16,26 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package one.oktw.galaxy.recipe.utils
+package one.oktw.galaxy.block
 
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.tag.TagKey
+import net.minecraft.util.math.BlockPos
+import one.oktw.galaxy.block.entity.CustomBlockEntity
+import one.oktw.galaxy.block.entity.HarvestBlockEntity
+import one.oktw.galaxy.item.CustomBlockItem
 
-class Ingredient(
-    private val tag: TagKey<Item>? = null,
-    private val items: List<Item>? = null
-) {
-    init {
-        if (tag == null && items == null) throw IllegalArgumentException("No input provided.")
-        if (tag != null && items != null) throw IllegalArgumentException("Only one input is allowed.")
-    }
-
-    fun matches(input: ItemStack): Boolean {
-        return when {
-            tag != null -> input.isIn(tag)
-            items != null -> items.contains(input.item)
-            else -> false
-        }
+class HarvestBlock : ModelCustomBlock("harvest", CustomBlockItem.HARVEST.createItemStack()) {
+    override fun createBlockEntity(pos: BlockPos): CustomBlockEntity {
+        return HarvestBlockEntity(blockEntityType, pos, modelItem)
     }
 }

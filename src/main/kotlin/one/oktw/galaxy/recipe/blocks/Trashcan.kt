@@ -19,15 +19,25 @@
 package one.oktw.galaxy.recipe.blocks
 
 import net.minecraft.item.Items
-import net.minecraft.recipe.Ingredient
-import net.minecraft.recipe.ShapelessRecipe
+import net.minecraft.recipe.Ingredient.ofItems
+import net.minecraft.recipe.RawShapedRecipe
+import net.minecraft.recipe.ShapedRecipe
 import net.minecraft.recipe.book.CraftingRecipeCategory
-import net.minecraft.util.collection.DefaultedList
 import one.oktw.galaxy.item.CustomBlockItem
 
-class Elevator : ShapelessRecipe(
+class Trashcan : ShapedRecipe(
     "",
-    CraftingRecipeCategory.EQUIPMENT,
-    CustomBlockItem.ELEVATOR.createItemStack(),
-    DefaultedList.copyOf(Ingredient.EMPTY, Ingredient.ofItems(Items.ENDER_PEARL), Ingredient.ofItems(Items.IRON_BLOCK))
+    CraftingRecipeCategory.BUILDING,
+    RawShapedRecipe.create(
+        mapOf(
+            Character.valueOf('g') to ofItems(Items.GLASS),
+            Character.valueOf('c') to ofItems(Items.CACTUS),
+            Character.valueOf('t') to ofItems(Items.TERRACOTTA),
+            Character.valueOf('s') to ofItems(Items.SAND, Items.RED_SAND)
+        ),
+        "ggg",
+        "gcg",
+        "tst"
+    ),
+    CustomBlockItem.TRASHCAN.createItemStack()
 )
