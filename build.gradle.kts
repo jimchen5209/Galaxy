@@ -12,7 +12,7 @@ val version = "0.0.1"
 val group = "one.oktw"
 
 val fabricVersion = "0.97.8+1.20.6"
-val galaxyLibVersion = "9a964eaf"
+val galaxyLibVersion = "4c7a3726"
 
 repositories {
     mavenCentral()
