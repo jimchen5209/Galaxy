@@ -1,6 +1,6 @@
 /*
  * OKTW Galaxy Project
- * Copyright (C) 2018-2024
+ * Copyright (C) 2018-2025
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
@@ -18,7 +18,6 @@
 
 package one.oktw.galaxy.block
 
-import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks.*
 import net.minecraft.block.entity.BlockEntityType
@@ -37,7 +36,7 @@ open class CustomBlock(final override val identifier: Identifier, val baseBlock:
     protected val blockEntityType: BlockEntityType<CustomBlockEntity> = Registry.register(
         Registries.BLOCK_ENTITY_TYPE,
         identifier,
-        FabricBlockEntityTypeBuilder.create({ pos, _ -> createBlockEntity(pos) }, BARRIER).build()
+        BlockEntityType({ pos, _ -> createBlockEntity(pos) }, setOf(BARRIER))
     )
 
     companion object {
